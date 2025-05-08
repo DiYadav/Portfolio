@@ -1,0 +1,23 @@
+# Ignore Python virtual environment and DB
+backend/env/
+backend/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Ignore Django migrations
+*/migrations/
+!*/migrations/__init__.py
+
+# Node modules and build files
+frontend/node_modules/
+dist/
+build/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
