@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
-
 const Home = () => {
   return (
-    <div className="flex items-center justify-center h-screen bg-[#111111] text-white ml-[250px]">
+    <div className="absolute top-0 right-10 h-screen bg-[#111111] text-white ml-[250px]">
       <div className="text-center max-w-3xl px-4">
         <h1 className="text-4xl md:text-5xl font-bold mb-6">
           Hi, I'm <span className="text-blue-500">Dinesh Yadav</span>

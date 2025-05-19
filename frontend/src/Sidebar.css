@@ -2,15 +2,16 @@
 
 /* Sidebar container */
 .w-64 {
-    width: 16rem;
-  }
+    width: 25rem;
+    height: 20rem;
+}
   
   .min-h-screen {
     min-height: 100vh;
   }
   
   .bg-white {
-    background-color: white;
+    background-color: rgb(155, 140, 156);
   }
   
   .shadow-md {
@@ -96,11 +97,11 @@
   }
   
   .w-24 {
-    width: 6rem;
+    width: 10rem;
   }
   
   .h-24 {
-    height: 6rem;
+    height: 10rem;
   }
   
   .mx-auto {
