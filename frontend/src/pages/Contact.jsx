@@ -1,8 +1,9 @@
 import React from 'react';
 
+
 function Contact() {
   return (
-    <div className="min-h-screen absolute top-0 left-0 bg-white-100 px-6 py-12">
+    <div className="flex w-[500px] h-[400px] justify-end bg-[#111111] text-black ml-[250px] bg-white-100 px-6 py-12">
       <div className="max-w-5xl w-full bg-white p-10 rounded-lg shadow-lg grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Contact Info */}
         <div>

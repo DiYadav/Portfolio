@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router';
 const Home = () => {
   return (
-    <div className="absolute top-0 right-10 h-screen bg-[#111111] text-white ml-[250px]">
+    <div className="flex w-[500px] h-[400px] justify-end bg-[#111111] text-black ml-[250px]">
       <div className="text-center max-w-3xl px-4">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">
-          Hi, I'm <span className="text-blue-500">Dinesh Yadav</span>
+        <h1 className="text-black text-4xl md:text-5xl font-bold mb-6">
+          Hi, I'm <span className='text-blackc;'>Dinesh Yadav</span>
         </h1>
         <p className="text-gray-300 text-lg mb-6">
           A passionate Backend Developer crafting beautiful and functional web experiences

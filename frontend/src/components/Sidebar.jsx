@@ -27,7 +27,7 @@ const Sidebar = () => {
       <div className="text-center">
         <img
           src="/dinesh.jpg" // Use your profile picture URL here
-          alt="Profile"
+          alt="Profile"    
           className="w-24 h-24 rounded-full mx-auto"/>
         <h2 className="text-gray-500 text-sm">Dinesh Yadav</h2>
         <p className="text-gray-500 text-sm">Backend Developer</p>

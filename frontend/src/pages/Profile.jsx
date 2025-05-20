@@ -1,8 +1,7 @@
 import React from "react";
-import '../Profile.css';
 const Profile=()=>{
     return(
-        <div className="dinesh">
+        <div className="bg-blue-500 text-white p-4 justify-center item-center">
             this is the profile Page.
         </div>
     )

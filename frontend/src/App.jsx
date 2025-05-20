@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'; // fixed import
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Sidebar from './components/Sidebar';
+import MediaCard from './components/Projects';
 import Contact from './pages/Contact';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/Projects" element={<MediaCard/>}/>
         </Routes>
       </div>
     </div>
