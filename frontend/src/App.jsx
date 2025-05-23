@@ -1,27 +1,39 @@
-import { Routes, Route } from 'react-router-dom'; // fixed import
-import Home from './pages/Home';
-import Profile from './pages/Profile';
-import Sidebar from './components/Sidebar';
-import MediaCard from './components/Projects';
-import Contact from './pages/Contact';
+import { useState } from 'react'
+import {BrowserRouter as Router,Routes,Route, useLocation} from 'react-router-dom'
+// import Mainlayout from './Pages/Mainlayout'
+import Home from './Pages/Home'
+import Startpage from './Pages/Startpage'
+import Sidebar from './components/Sidebar'
+import Skills from './Pages/Skills'
+
+function Appcontent(){
+  const location= useLocation()
+
+  const hideSidebar=location.pathname==="/";
+
+    return(
+      <div flex w-full>
+        {!hideSidebar && <Sidebar/>}
+        <Routes>
+          <Route path="/" element={<Startpage/>}/>
+          {/* <Route path="/main" element={<Mainlayout/>}/> */}
+          <Route path="/Home" element={<Home/>}/>
+          <Route path="Skills" element={<Skills/>}/>
+        </Routes>
+      </div>
+    );
+ }
+
 
 function App() {
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar on the left */}
-      <Sidebar />
-
-      {/* Main content on the right */}
-      <div className="flex-1 flex justify-center items-center bg-black p-10">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Profile" element={<Profile />} />
-          <Route path="/Contact" element={<Contact />} />
-          <Route path="/Projects" element={<MediaCard/>}/>
-        </Routes>
-      </div>
+    <div className='w-full h-screen bg-slate-900'>
+      <Router>
+        <Appcontent/>
+      </Router>
+          
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

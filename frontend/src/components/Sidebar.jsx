@@ -1,19 +1,17 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router'; // For navigation
-import '../Sidebar.css';
+import React from 'react'
+import { Link ,useLocation} from 'react-router-dom';
 
 
-// Sidebar component
 const Sidebar = () => {
   const location = useLocation(); // For checking the active route
 
   // Navigation links
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Profile', path: '/Profile' },
-    { name: 'Skills', path: '/Skills' },
+    { name: 'Home', path: '/Home' },
     { name: 'Projects', path: '/Projects' },
+    { name: 'Skills', path: '/Skills' },
     { name: 'Contact', path: '/Contact' },
+    {name:'About me', path:'/'},
   ];
 
   // Function to apply active class to the current route
@@ -22,29 +20,26 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 min-h-screen bg-white shadow-md p-6">
-      {/* Profile Picture */}
-      <div className="text-center">
-        <img
-          src="/dinesh.jpg" // Use your profile picture URL here
-          alt="Profile"    
-          className="w-24 h-24 rounded-full mx-auto"/>
-        <h2 className="text-gray-500 text-sm">Dinesh Yadav</h2>
-        <p className="text-gray-500 text-sm">Backend Developer</p>
-      </div>
+    <div className="relative h-screen w-[350px] bg-blue-500 text-white flex flex-col items-center py-10 rounded-lg shadow-lg">
+      <img
+        src="/dinesh.jpg"
+        alt="Profile"
+        className="w-32 h-32 rounded-full  border-2 border-black shadow-md"
+      />
+      <h2 className="mt-6 text-lg font-semibold">Dinesh Yadav</h2>
+      <p className="mt-2 text-sm  text-white/80">Backend Developer</p>
 
-      {/* Navigation Links */}
-      <nav className="mt-10 space-y-4">
-        {navLinks.map((link) => (
-          <Link
-            to={link.path}
-            key={link.name}
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-100 ${isActive(link.path)}`}
-          >
-            <span>{link.name}</span>
-          </Link>
-        ))}
-      </nav>
+      <nav className="mt-10 w-full items-center px-6 space-y-4">
+              {navLinks.map((link) => (
+                <Link
+                  to={link.path}
+                  key={link.name}
+                  className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-100 ${isActive(link.path)}`}
+                >
+                  <span>{link.name}</span>
+                </Link>
+              ))}
+            </nav>
     </div>
   );
 };

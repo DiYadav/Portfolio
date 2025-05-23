@@ -1,30 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router';
+import Skills from './Skills';
+
 const Home = () => {
   return (
-    <div className="flex w-[500px] h-[400px] justify-end bg-[#111111] text-black ml-[250px]">
-      <div className="text-center max-w-3xl px-4">
-        <h1 className="text-black text-4xl md:text-5xl font-bold mb-6">
-          Hi, I'm <span className='text-blackc;'>Dinesh Yadav</span>
-        </h1>
-        <p className="text-gray-300 text-lg mb-6">
-          A passionate Backend Developer crafting beautiful and functional web experiences
-        </p>
-        <Link
-          to="/Projects"
-          className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-sm font-medium transition"
-        >
-          View My Work →
-        </Link>
-        <div className="mt-8">
-          <img
-            src="/workspace.jpg"
-            alt="Workspace"
-            className="mx-auto w-full max-w-md rounded-xl shadow-lg"
-          />
+    <div className="absolute top-20 ml-15 right-48 bg-slate-900 text-white px-4 py-2">
+      
+      {/* Main content */}
+      <div className=" grid top-0 justify-end">
+        <div className="text-white p-6 rounded shadow-md max-w-2xl w-full text-center">
+          <h1 className="text-4xl font-bold mb-4">Hi, I'm <span>Dinesh Yadav</span></h1>
+          <p className="text-lg">
+            A passionate Backend Developer crafting beautiful and functional web experiences
+          </p>
         </div>
       </div>
+      
     </div>
+  
   );
 };
 
