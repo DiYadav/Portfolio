@@ -1,9 +1,9 @@
 import React from 'react';
 import { Outlet } from "react-router-dom";
 import Sidebar from '../components/Sidebar';
-import Home from './Home';
+// import Home from './Home';
 
-function Mainlayout() {
+function Mainlayout() { 
   return (
     <div className='flex h-screen'>
 

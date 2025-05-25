@@ -20,7 +20,7 @@ const Contact= () => {
   };
 
   return (
-    <div className="absolute top-20 ml-15  mb-10 right-48 w-[800px] min-h-screen bg-gray-100 flex flex-col items-center px-4 py-10">
+    <div className="absolute top-20 ml-15  mb-10 right-48 w-[800px] h-[650px] rounded-xl bg-gray-100 flex flex-col items-center px-4 py-10">
       <h1 className="text-4xl font-bold text-blue-700 mb-6">Contact Me</h1>
 
       <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-xl">
@@ -73,9 +73,9 @@ const Contact= () => {
       </div>
 
       <div className="mt-8 text-center text-gray-600">
-        <p>Email: <a href="mailto:your@email.com" className="text-blue-500 hover:underline">your@email.com</a></p>
-        <p>Phone: +91 98765 43210</p>
-        <p>Location: India</p>
+        <p>Email: <a href="mailto:yadavdinesh2852002@Gmail.com" className="text-blue-500 hover:underline">yadavdinesh2852002@Gmail.com</a></p>
+        <p>Phone: +91 91589 61119</p>
+        <p>Location: India, Pune</p>
       </div>
     </div>
   );
