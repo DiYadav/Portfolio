@@ -1,18 +1,26 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Startpage() {
+
+  const navigate=useNavigate();
+
   return (
     <div className="w-full min-h-screen bg-black text-white font-sans">
       <section className="relative w-full min-h-[550px] bg-black-600 flex items-center justify-center">
         {/* Home Button at top-right */}
-        <button className="absolute top-10 right-40 bg-black-500 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+        <button 
+        onClick={()=>navigate("/")}
+        className="absolute top-10 right-40 bg-black-500 text-white px-4 py-2 rounded hover:bg-red-700 transition">
           Me
         </button>
-        <button className="absolute top-10 right-10 bg-black-500 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+        <button 
+        onClick={()=>navigate("/Contact")}
+        className="absolute top-10 right-10 bg-black-500 text-white px-4 py-2 rounded hover:bg-red-700 transition">
           Contact
         </button>
-        <button onClick={()=>Navigate("/")} className="absolute top-10 right-60 bg-black-500 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+        <button onClick={()=>navigate("/Home")}
+         className="absolute top-10 right-60 bg-black-500 text-white px-4 py-2 rounded hover:bg-red-700 transition">
           Home
         </button>
         {/* Main Content */}
@@ -35,9 +43,9 @@ function Startpage() {
           {/* Right Side */}
           <div className="flex-1 flex justify-center">
             <img
-              src="/dinesh.jpg" // Replace with actual path
+              src="/dk.jpg" // Replace with actual path
               alt="Profile"
-              className="w-80 h-auto rounded-lg shadow-lg"
+              className="w-[500px] mt-10 mb-20 ml-10 h-auto rounded shadow-[0_0_30px_rgba(0,0,0,0.2)]"
             />
           </div>
         </div>

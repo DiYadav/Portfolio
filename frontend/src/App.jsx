@@ -5,6 +5,7 @@ import Home from './Pages/Home'
 import Startpage from './Pages/Startpage'
 import Sidebar from './components/Sidebar'
 import Skills from './Pages/Skills'
+import Contact from './Pages/Contact'
 
 function Appcontent(){
   const location= useLocation()
@@ -19,6 +20,7 @@ function Appcontent(){
           {/* <Route path="/main" element={<Mainlayout/>}/> */}
           <Route path="/Home" element={<Home/>}/>
           <Route path="Skills" element={<Skills/>}/>
+          <Route path="Contact" element={<Contact/>}/>
         </Routes>
       </div>
     );
