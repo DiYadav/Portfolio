@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Phone, Heart, User, GraduationCap,FolderGit2, UserRoundCog } from "lucide-react"; // optional: you can use Heroicons or any other icon lib
 import Card from "../components/Card";
+import Experience from "../components/Experience";
+import Proj from "./Proj";
 
 const tabs = [
   { id: 0, label: "EDUCATION", icon: <GraduationCap className="w-5 h-5" /> },
@@ -12,15 +14,15 @@ function Projects() {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <div className="absolute top-10 left-[700px] w-full max-w-md mx-auto mt-10">
-      <div className="flex justify-around border-b border-gray-300">
+    <div className="absolute top-10 left-[500px] w-full max-w-md mx-auto mt-10">
+      <div className="flex justify-around  border-gray-300">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition duration-200 ${
               activeTab === tab.id
-                ? "text-blue-600 border-b-2 border-blue-600"
+                ? "text-white border-b-2"
                 : "text-gray-500 hover:text-blue-500"
             }`}
           >
@@ -33,8 +35,8 @@ function Projects() {
       {/* Content Area (Optional) */}
       <div className="mt-6 text-center text-gray-700">
         {activeTab === 0 && <p className="flex  "><Card/></p>}
-        {activeTab === 1 && <p>Exp</p>}
-        {activeTab === 2 && <p>Projects</p>}
+        {activeTab === 1 && <p><Experience/></p>}
+        {activeTab === 2 && <p><Proj/></p>}
       </div>
     </div>
   );

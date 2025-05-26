@@ -1,48 +1,108 @@
-import React from 'react'
-// import './index.css'
+import React, { useState } from "react";
 
-function Card() {
+const Education = () => {
+  const [educationList, setEducationList] = useState([
+    {
+      year: "2023 - 2025",
+      degree: "MCA - DIMR College, Balewadi",
+      location: "Pune, India",
+    },
+    {
+      year: "2020 - 2023",
+      degree: "B.Sc(cs) - R.B. Madkholkar",
+      location: "Kolhapur, India | CGPA: 8.75",
+    },
+    {
+      year: "2018 - 2020",
+      degree: "HSC - N.B. Patil Jr College",
+      location: "Kolhapur, India | Marks: 62.46%",
+    },
+  ]);
+
+  const [newEdu, setNewEdu] = useState({
+    year: "",
+    degree: "",
+    location: "",
+  });
+
+  const handleChange = (e) => {
+    setNewEdu({ ...newEdu, [e.target.name]: e.target.value });
+  };
+
+  const handleAdd = () => {
+    if (newEdu.year && newEdu.degree && newEdu.location) {
+      setEducationList([...educationList, newEdu]);
+      setNewEdu({ year: "", degree: "", location: "" });
+    }
+  };
+
+  const handleDelete = (index) => {
+    const updated = [...educationList];
+    updated.splice(index, 1);
+    setEducationList(updated);
+  };
+
   return (
-    // <div className='grid col-auto w-[800px] h-[596px] p-4  bg-blue-950 rounded-2xl text-white'>
-     
-    <section class="bg-[#0f172a]  w-[800px] border scroll-hide text-white p-6 rounded-lg">
-   <h2 class="text-xl font-bold mb-6">Education Details</h2>
- 
+    <div className="text-white mt-1 ">
+      <div className="bg-[#0f172a] flex w-[900px] p-6 overflow-y-auto scrollbar-hide pr-2 max-w-6xl flex-col md:flex-row gap-6">
 
-  {/* <!-- Timeline wrapper --> */}
-  <div class="border-l-4 border-cyan-400 pl-6 space-y-6">
+        {/* Left: Form */}
+        <div className="md:w-1/2 space-y-4">
+          <h2 className="text-xl font-bold mb-2">Add Education</h2>
+          <input
+            name="year"
+            value={newEdu.year}
+            onChange={handleChange}
+            placeholder="Year (e.g., 2020 - 2023)"
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
+          <input
+            name="degree"
+            value={newEdu.degree}
+            onChange={handleChange}
+            placeholder="Degree and Institution"
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
+          <input
+            name="location"
+            value={newEdu.location}
+            onChange={handleChange}
+            placeholder="Location | CGPA / Marks"
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
+          <button
+            onClick={handleAdd}
+            className="bg-cyan-500 hover:bg-cyan-600 text-white py-2 px-4 rounded-md w-full"
+          >
+            Add Education
+          </button>
+        </div>
 
-    {/* <!-- MCA --> */}
-    <div class="relative bg-slate-800 p-4 rounded-md shadow-lg">
-      <div class="absolute -left-3 top-4 w-4 h-4 bg-cyan-400 rounded-full border-2 border-white"></div>
-      <p class="text-sm text-cyan-300 font-semibold">2023 - 2025</p>
-      <h3 class="text-lg font-bold">MCA - DIMR College, Balewadi</h3>
-      <p class="text-sm text-gray-300">Pune, India</p>
+        {/* Right: Timeline */}
+        <div className="md:w-1/2 relative pl-6 h-[400px] ">
+          <h2 className="text-xl font-bold mb-4">Education Timeline</h2>
+          <div className="absolute left-3 top-10 bottom-0 w-1 bg-cyan-400 rounded-full"></div>
+          {educationList.map((edu, index) => (
+            <div key={index} className="mb-8 flex items-start">
+              <div className="w-4 h-4 bg-[#0f172a] border-4 border-cyan-400 rounded-full mt-2 mr-4 z-10"></div>
+              <div className="bg-gray-800 p-4 rounded-md w-full relative">
+                <p className="text-cyan-400 font-semibold text-sm">{edu.year}</p>
+                <h3 className="text-white font-bold">{edu.degree}</h3>
+                <p className="text-gray-300 text-sm">{edu.location}</p>
+                <button
+                  onClick={() => handleDelete(index)}
+                  className="absolute top-2 right-2 text-red-400 hover:text-red-600"
+                >
+                  ✖
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
     </div>
+  );
+};
 
-    {/* <!-- B.Sc(cs) --> */}
-    <div class="relative bg-slate-800 p-4 rounded-md shadow-lg">
-      <div class="absolute -left-3 top-4 w-4 h-4 bg-cyan-400 rounded-full border-2 border-white"></div>
-      <p class="text-sm text-cyan-300 font-semibold">2020 - 2023</p>
-      <h3 class="text-lg font-bold">B.Sc(cs) - R.B. Madkholkar</h3>
-      <p class="text-sm text-gray-300">Kolhapur, India | CGPA: 8.75</p>
-    </div>
-
-    {/* <!-- HSC --> */}
-    <div class="relative bg-slate-800 p-4 rounded-md shadow-lg">
-      <div class="absolute -left-3 top-4 w-4 h-4 bg-cyan-400 rounded-full border-2 border-white"></div>
-      <p class="text-sm text-cyan-300 font-semibold">2018 - 2020</p>
-      <h3 class="text-lg font-bold">HSC - N.B. Patil Jr College</h3>
-      <p class="text-sm text-gray-300">Kolhapur, India | Marks: 62.46%</p>
-    </div>
-
-  </div>
-</section>
-  
-    
-    // </div>
-   
-  )
-}
-
-export default Card;
+export default Education;

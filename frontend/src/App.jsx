@@ -7,6 +7,8 @@ import Sidebar from './components/Sidebar'
 import Skills from './Pages/Skills'
 import Contact from './Pages/Contact'
 import Projects from './Pages/Projects'
+import Experience from './components/Experience'
+import Proj from './Pages/Proj'
 
 function Appcontent(){
   const location= useLocation()
@@ -20,9 +22,11 @@ function Appcontent(){
           <Route path="/" element={<Startpage/>}/>
           {/* <Route path="/main" element={<Mainlayout/>}/> */}
           <Route path="/Home" element={<Home/>}/>
-          <Route path="Skills" element={<Skills/>}/>
-          <Route path="Contact" element={<Contact/>}/>
-          <Route path="Projects" element={<Projects/>}/>
+          <Route path="/Skills" element={<Skills/>}/>
+          <Route path="/Contact" element={<Contact/>}/>
+          <Route path="/Projects" element={<Projects/>}/>
+          <Route path="/Experience" element={<Experience/>}/>
+          <Route path="/Proj" element={<Proj/>}/>
         </Routes>
       </div>
     );
