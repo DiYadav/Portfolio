@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import {BrowserRouter as Router,Routes,Route, useLocation} from 'react-router-dom'
 // import Mainlayout from './Pages/Mainlayout'
-import Home from './Pages/Home'
+import Home from './pages/Home'
 import Startpage from './Pages/Startpage'
 import Sidebar from './components/Sidebar'
 import Skills from './Pages/Skills'
 import Contact from './Pages/Contact'
 import Projects from './Pages/Projects'
 import Experience from './components/Experience'
-import Proj from './Pages/Proj'
+import Proj from './pages/Proj'
+import Hcard from './components/Hcard'
+
 
 function Appcontent(){
   const location= useLocation()
@@ -27,6 +29,7 @@ function Appcontent(){
           <Route path="/Projects" element={<Projects/>}/>
           <Route path="/Experience" element={<Experience/>}/>
           <Route path="/Proj" element={<Proj/>}/>
+          <Route path="/Hcard" element={<Hcard/>}/>
         </Routes>
       </div>
     );

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Phone, Heart, User, GraduationCap,FolderGit2, UserRoundCog } from "lucide-react"; // optional: you can use Heroicons or any other icon lib
 import Card from "../components/Card";
 import Experience from "../components/Experience";
-import Proj from "./Proj";
+import Proj from '../pages/Proj';
 
 const tabs = [
   { id: 0, label: "EDUCATION", icon: <GraduationCap className="w-5 h-5" /> },
