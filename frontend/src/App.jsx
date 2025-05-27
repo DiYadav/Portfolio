@@ -8,7 +8,8 @@ import Skills from './Pages/Skills'
 import Contact from './Pages/Contact'
 import Projects from './Pages/Projects'
 import Experience from './components/Experience'
-import Proj from './Pages/Proj'
+import Proj from './components/Proj'
+import Skill from './components/Skill'
 
 function Appcontent(){
   const location= useLocation()
@@ -27,6 +28,7 @@ function Appcontent(){
           <Route path="/Projects" element={<Projects/>}/>
           <Route path="/Experience" element={<Experience/>}/>
           <Route path="/Proj" element={<Proj/>}/>
+          <Route path="/Skill" element={<Skill/>}/>
         </Routes>
       </div>
     );
