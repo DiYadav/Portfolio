@@ -44,7 +44,7 @@ const Education = () => {
 
   return (
     <div className="text-white mt-1 ">
-      <div className="bg-[#0f172a] flex w-[900px] p-6 overflow-y-auto scrollbar-hide pr-2 max-w-6xl flex-col md:flex-row gap-6">
+      <div className="bg-slate-900 flex w-[900px] h-[600px] p-6  max-w-6xl flex-col md:flex-row gap-6">
 
         {/* Left: Form */}
         <div className="md:w-1/2 space-y-4">
@@ -79,7 +79,7 @@ const Education = () => {
         </div>
 
         {/* Right: Timeline */}
-        <div className="md:w-1/2 relative pl-6 h-[400px] ">
+        <div className="md:w-1/2 relative overflow-y-auto scrollbar-hide pr-2 pl-6 h-[560px] ">
           <h2 className="text-xl font-bold mb-4">Education Timeline</h2>
           <div className="absolute left-3 top-10 bottom-0 w-1 bg-cyan-400 rounded-full"></div>
           {educationList.map((edu, index) => (

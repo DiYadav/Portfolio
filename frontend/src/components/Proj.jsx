@@ -34,7 +34,7 @@ const Proj = () => {
   };
 
   return (
-    <div className="text-white flex w-[900px] mt-10 px-4">
+    <div className="text-white flex w-[900px] mt-7 px-4">
       <div className="bg-[#0f172a] p-6 rounded-md w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* Left: Add Project Form */}

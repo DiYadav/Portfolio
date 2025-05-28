@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link ,useLocation} from 'react-router-dom';
 
 
@@ -11,7 +10,7 @@ const Sidebar = () => {
     { name: 'Projects', path: '/Projects' },
     { name: 'Skills', path: '/Skills' },
     { name: 'Contact', path: '/Contact' },
-    {name:'About me', path:'/'},
+    { name:'About me', path:'/AboutMe'},
   ];
 
   // Function to apply active class to the current route
@@ -20,14 +19,14 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="relative h-screen w-[350px] bg-blue-500 text-white flex flex-col items-center py-10 rounded-lg shadow-lg">
+    <div className="relative h-screen w-[350px] bg-cyan-300 text-white flex flex-col items-center py-10 rounded-lg shadow-lg">
       <img
         src="/dinesh.jpg"
         alt="Profile"
         className="w-32 h-32 rounded-full  border-2 border-black shadow-md"
       />
-      <h2 className="mt-6 text-lg font-semibold">Dinesh Yadav</h2>
-      <p className="mt-2 text-sm  text-white/80">Backend Developer</p>
+      <h1 className="mt-6 text-lg text-black font-serif">Dinesh Yadav</h1>
+      <h2 className="mt-2 text-sm  text-black font-serif">Backend Developer</h2>
 
       <nav className="mt-10 w-full items-center px-6 space-y-4">
               {navLinks.map((link) => (
