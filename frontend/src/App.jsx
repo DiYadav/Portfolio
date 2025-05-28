@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {BrowserRouter as Router,Routes,Route, useLocation} from 'react-router-dom'
-// import Mainlayout from './Pages/Mainlayout'
+import AboutMe from './Pages/AboutMe'
 import Home from './Pages/Home'
 import Startpage from './Pages/Startpage'
 import Sidebar from './components/Sidebar'
@@ -14,14 +14,14 @@ import Skill from './components/Skill'
 function Appcontent(){
   const location= useLocation()
 
-  const hideSidebar=location.pathname==="/";
+  const hideSidebar=location.pathname==="/" || location.pathname==="/AboutMe";
 
     return(
       <div flex-1 w-full>
         {!hideSidebar && <Sidebar/>}
         <Routes>
+         
           <Route path="/" element={<Startpage/>}/>
-          {/* <Route path="/main" element={<Mainlayout/>}/> */}
           <Route path="/Home" element={<Home/>}/>
           <Route path="/Skills" element={<Skills/>}/>
           <Route path="/Contact" element={<Contact/>}/>
@@ -29,6 +29,7 @@ function Appcontent(){
           <Route path="/Experience" element={<Experience/>}/>
           <Route path="/Proj" element={<Proj/>}/>
           <Route path="/Skill" element={<Skill/>}/>
+           <Route path="/AboutMe" element={<AboutMe/>}/>
         </Routes>
       </div>
     );
@@ -36,6 +37,8 @@ function Appcontent(){
 
 
 function App() {
+
+
   return (
     <div className='w-full h-screen bg-slate-900'>
       <Router>

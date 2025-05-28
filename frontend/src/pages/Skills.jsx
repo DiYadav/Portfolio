@@ -154,19 +154,19 @@ const Skills = () => {
       {/* Modal */}
       {showModal && modalCertificate && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <div className="bg-white text-black p-6 rounded-xl shadow-xl w-[600px] max-w-[90%] relative">
+          <div className="bg-slate-900 ml[900px] text-black p-6 rounded-xl shadow-xl w-[700px] h-[500px] max-w-[90%] relative">
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 text-white bg-red-600 px-2 py-1 rounded"
             >
-              ✕
+              Close
             </button>
             <img
               src={modalCertificate.image}
               alt="Certificate"
-              className="w-full h-[300px] object-contain rounded mb-4"
+              className="w-full h-[400px] object-contain rounded mb-4"
             />
-            <p className="text-lg font-medium">{modalCertificate.description}</p>
+            <p className="text-lg font-medium text-white">{modalCertificate.description}</p>
           </div>
         </div>
       )}

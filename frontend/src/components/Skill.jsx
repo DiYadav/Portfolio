@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Skills = () => {
+const Skill = () => {
   const [skills, setSkills] = useState([
     { id: 1, name: 'HTML', level: 90 },
     { id: 2, name: 'CSS', level: 80 },
@@ -93,4 +93,4 @@ const Skills = () => {
   );
 };
 
-export default Skills;
+export default Skill;

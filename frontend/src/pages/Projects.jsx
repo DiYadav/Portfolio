@@ -14,7 +14,7 @@ function Projects() {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <div className="absolute top-10 left-[500px] w-full max-w-md mx-auto mt-10">
+    <div className="absolute top-8 left-[500px] w-full max-w-md mx-auto mt-10">
       <div className="flex justify-around  border-gray-300">
         {tabs.map((tab) => (
           <button
