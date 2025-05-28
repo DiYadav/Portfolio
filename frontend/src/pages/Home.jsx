@@ -1,4 +1,6 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { Github, Mail, Linkedin } from 'lucide-react';
 import Hcard from '../components/Hcard';
 
 const Home = () => {
@@ -9,28 +11,38 @@ const Home = () => {
   ];
 
   return (
-    <div className="absolute top-20 right-48 bg-slate-900 text-white px-4 py-8 rounded-xl shadow-lg">
-      {/* Main content */}
-      <div className="grid justify-end mb-10">
-        <div className="text-white p-6 rounded shadow-md max-w-2xl w-full text-center">
-          <h1 className="text-4xl font-bold mb-4">
-            Hi, I'm <span className="text-blue-400">Dinesh Yadav</span>
-          </h1>
-          <p className="text-lg">
-            A passionate Backend Developer crafting beautiful and functional web experiences
-          </p>
+    <div className="absolute top-0 left-[350px] w-[1180px]  h-[695px] bg-gray-50 text-gray-900">
+      {/* Hero Section */}
+      <section className="flex flex-col items-center justify-center text-center py-20 px-4">
+        <motion.h2
+          className="text-4xl md:text-5xl font-bold"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          Hi, I'm <span className="text-blue-600">Dinesh Yadav</span>
+        </motion.h2>
+        <p className="mt-4 text-lg text-gray-600 max-w-xl ">
+          A passionate Backend Developer crafting beautiful and functional web experiences.
+        </p>
+        <div className="flex space-x-4 mt-6 text-gray-700 h-[50px]" >
+          <a href="https://github.com/" target="_blank" rel="noopener noreferrer"><Github /></a>
+          <a href="mailto:you@example.com"><Mail /></a>
+          <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer"><Linkedin /></a>
         </div>
-      </div>
+      </section>
 
-      {/* Cards section */}
+      {/* Stat Cards */}
+      <section className="py-10 px-6 bg-white h-[100px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {cards.map((card, index) => (
+            <Hcard key={index} title={card.title} description={card.description} />
+          ))}
+        </div>
+      </section>
+
     
-      <div className="absolute grid grid-cols-1 right-20 sm:grid-cols-2 md:grid-cols-3 gap-[100px] justify-center">
-        {cards.map((cards, index) => (
-          <Hcard key={index} title={cards.title} description={cards.description} />
-        ))}
-      </div>
-      </div>
-
+     
+    </div>
   );
 };
 

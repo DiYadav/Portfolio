@@ -82,7 +82,7 @@ const Proj = () => {
         {/* Right: Project Timeline */}
         <div>
           <h2 className="text-xl font-bold mb-4  text-center">Projects</h2>
-          <div className="relative pl-6 h-[430px] overflow-y-auto scrollbar-hide pr-2">
+          <div className="relative pl-6 h-[480px] overflow-y-auto scrollbar-hide pr-2">
             <div className="absolute left-3 top-0 bottom-0 w-1 bg-cyan-400 rounded-full"></div>
             {projects.map((project, index) => (
               <div key={index} className="mb-6 flex items-start group">
@@ -110,4 +110,4 @@ const Proj = () => {
   );
 };
 
-export default Proj;
+export default Proj;

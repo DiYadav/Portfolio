@@ -1,63 +1,9 @@
-// import React from 'react';
-
-// const experiences = [
-//   {
-//     year: '2024 – Present',
-//     role: 'Frontend Developer - TechNova Pvt Ltd',
-//     location: 'Pune, India',
-//     details: 'React, Tailwind CSS, REST APIs',
-//   },
-//   {
-//     year: '2023 – 2024',
-//     role: 'Intern - CodeVerse',
-//     location: 'Remote',
-//     details: 'Built UI components and learned Git, React',
-//   },
-//   {
-//     year: '2022 – 2023',
-//     role: 'Freelancer',
-//     location: 'Kolhapur, India',
-//     details: 'Worked on 3+ frontend projects for local clients',
-//   },
-// ];
-
-// const Experience = () => {
-//   return (
-//     <div className="text-white flex justify-center mt-10">
-//       <div className="border border-gray-400 rounded-md p-6 w-full max-w-3xl bg-[#0f172a]">
-//         <h2 className="text-center text-xl font-bold mb-8">Experience</h2>
-//         <div className="relative pl-6">
-//           {/* vertical line */}
-//           <div className="absolute left-3 top-0 bottom-0 w-1 bg-cyan-400 rounded-full"></div>
-
-//           {experiences.map((exp, index) => (
-//             <div key={index} className="mb-8 flex items-start">
-//               {/* Circle marker */}
-//               <div className="w-4 h-4 bg-[#0f172a] border-4 border-cyan-400 rounded-full mt-2 mr-4 z-10"></div>
-
-//               {/* Card */}
-//               <div className="bg-gray-800 p-4 rounded-md w-full">
-//                 <p className="text-cyan-400 font-semibold text-sm">{exp.year}</p>
-//                 <h3 className="text-white font-bold">{exp.role}</h3>
-//                 <p className="text-gray-300 text-sm">{exp.location}</p>
-//                 <p className="text-gray-400 text-xs mt-1">{exp.details}</p>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Experience;
-
 import React, { useState } from 'react';
 
 const Experience = () => {
   const [experiences, setExperiences] = useState([
     {
-      year: '2024 – Present',
+      year: '2024 - Present',
       role: 'Frontend Developer - TechNova Pvt Ltd',
       location: 'Pune, India',
       details: 'React, Tailwind CSS, REST APIs',

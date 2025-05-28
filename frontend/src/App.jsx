@@ -6,11 +6,10 @@ import Startpage from './Pages/Startpage'
 import Sidebar from './components/Sidebar'
 import Skills from './Pages/Skills'
 import Contact from './Pages/Contact'
-import Projects from './Pages/Projects'
+import Projects from './pages/Projects'
 import Experience from './components/Experience'
-import Proj from './pages/Proj'
-import Hcard from './components/Hcard'
-
+import Proj from './components/Proj'
+import Skill from './components/Skill'
 
 function Appcontent(){
   const location= useLocation()
@@ -29,7 +28,7 @@ function Appcontent(){
           <Route path="/Projects" element={<Projects/>}/>
           <Route path="/Experience" element={<Experience/>}/>
           <Route path="/Proj" element={<Proj/>}/>
-          <Route path="/Hcard" element={<Hcard/>}/>
+          <Route path="/Skill" element={<Skill/>}/>
         </Routes>
       </div>
     );
@@ -47,4 +46,4 @@ function App() {
   )
 }
 
-export default App
+export default App
