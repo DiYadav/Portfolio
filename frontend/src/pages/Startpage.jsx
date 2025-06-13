@@ -1,26 +1,68 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import axios from "axios";
 
 function Startpage() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
 
   const closeModal = () => {
     setShowLogin(false);
     setShowRegister(false);
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:8000/api/login/", {
+        username,
+        password,
+      });
+
+      if (res.status === 200) {
+        console.log(res.data.message);
+        navigate("/Home");
+      }
+    } catch (error) {
+      console.error("Login failed:", error.response?.data?.error || error.message);
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:8000/api/register/", {
+        username,
+        email,
+        password,
+        password2,
+      });
+
+      if (res.status === 201 || res.status === 200) {
+        console.log("Registration successful:", res.data);
+        navigate("/Home");
+      }
+    } catch (error) {
+      console.error("Registration failed:", error.response?.data?.error || error.message);
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-black text-white font-sans relative">
       {/* Header Buttons */}
-      <button 
+      <button
         onClick={() => setShowLogin(true)}
         className="absolute top-10 right-40 bg-black text-white px-4 py-2 rounded hover:bg-red-700 transition"
       >
         Login
       </button>
-      <button 
+      <button
         onClick={() => setShowRegister(true)}
         className="absolute top-10 right-10 bg-black text-white px-4 py-2 rounded hover:bg-red-700 transition"
       >
@@ -38,8 +80,8 @@ function Startpage() {
             <p className="text-gray-200 mb-6 max-w-md">
               I'm a Full Stack Developer skilled in building dynamic web applications using React, Node.js, Django, and MySQL...
             </p>
-            <button 
-            onClick={()=>navigate("/AboutMe")}
+            <button
+              onClick={() => navigate("/AboutMe")}
               className="border border-white text-white px-6 py-2 hover:bg-white hover:text-pink-600 transition"
             >
               About Me
@@ -55,9 +97,11 @@ function Startpage() {
             />
           </div>
         </div>
+
+        {/* Bottom Stats */}
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex gap-10 text-center">
           <div>
-             <p className="text-red-200 text-xl font-bold">0</p>
+            <p className="text-red-200 text-xl font-bold">0</p>
             <p className="text-sm text-gray-100">Years Experience</p>
           </div>
           <div>
@@ -86,44 +130,98 @@ function Startpage() {
               {showLogin ? "Login" : "Register"}
             </h2>
 
-            <form className="space-y-4">
-              <input
-                type="text"
-                placeholder="Username"
-                className="w-full px-4 py-2 bg-black border border-gray-600 rounded text-white"
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full px-4 py-2 bg-black border border-gray-600 rounded text-white"
-              />
+            {showLogin ? (
+              <form onSubmit={handleLogin} className="space-y-4">
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Username"
+                  className="w-full px-4 py-2 bg-black border border-gray-600 rounded text-white"
+                />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="w-full px-4 py-2 bg-black border border-gray-600 rounded text-white"
+                />
 
-              {showRegister && (
+                <div className="flex justify-between items-center text-sm text-gray-400">
+                  <label>
+                    <input type="checkbox" className="mr-2" /> Remember me
+                  </label>
+                  <a href="#" className="hover:underline">
+                    Forgot password?
+                  </a>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded text-white hover:from-pink-600 hover:to-purple-600 transition"
+                >
+                  Login
+                </button>
+
+                <div className="flex justify-center gap-4 mt-4">
+                  <img src="https://img.icons8.com/color/48/google-logo.png" alt="G" width={24} />
+                  <img src="https://img.icons8.com/color/48/facebook-new.png" alt="F" width={24} />
+                  <img src="https://img.icons8.com/material-rounded/48/github.png" alt="GH" width={24} />
+                </div>
+              </form>
+            ) : (
+              <form onSubmit={handleRegister} className="space-y-4">
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Username"
+                  className="w-full px-4 py-2 bg-black border border-gray-600 rounded text-white"
+                />
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email"
                   className="w-full px-4 py-2 bg-black border border-gray-600 rounded text-white"
                 />
-              )}
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="w-full px-4 py-2 bg-black border border-gray-600 rounded text-white"
+                />
+                <input
+                  type="password"
+                  value={password2}
+                  onChange={(e) => setPassword2(e.target.value)}
+                  placeholder="Confirm Password"
+                  className="w-full px-4 py-2 bg-black border border-gray-600 rounded text-white"
+                />
 
-              <div className="flex justify-between items-center text-sm text-gray-400">
-                <label>
-                  <input type="checkbox" className="mr-2" /> Remember me
-                </label>
-                {showLogin && <a href="#" className="hover:underline">Forgot password?</a>}
-              </div>
+                <div className="flex justify-between items-center text-sm text-gray-400">
+                  <label>
+                    <input type="checkbox" className="mr-2" /> Remember me
+                  </label>
+                </div>
 
-              <button className="w-full py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded text-white hover:from-pink-600 hover:to-purple-600 transition">
-                {showLogin ? "Login" : "Register"}
-              </button>
+                <button
+                  type="submit"
+                  className="w-full py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded text-white hover:from-pink-600 hover:to-purple-600 transition"
+                >
+                  Register
+                </button>
 
-              <div className="flex justify-center gap-4 mt-4">
-                <button className="text-2xl"><img src="https://img.icons8.com/color/48/google-logo.png" alt="G" width={24} /></button>
-                <button className="text-2xl"><img src="https://img.icons8.com/color/48/facebook-new.png" alt="F" width={24} /></button>
-                <button className="text-2xl"><img src="https://img.icons8.com/material-rounded/48/github.png" alt="GH" width={24} /></button>
-              </div>
-            </form>
+                <div className="flex justify-center gap-4 mt-4">
+                  <img src="https://img.icons8.com/color/48/google-logo.png" alt="G" width={24} />
+                  <img src="https://img.icons8.com/color/48/facebook-new.png" alt="F" width={24} />
+                  <img src="https://img.icons8.com/material-rounded/48/github.png" alt="GH" width={24} />
+                </div>
+              </form>
+            )}
 
+            {/* Toggle Button */}
             <div className="text-center text-gray-400 text-sm mt-6">
               {showLogin ? "Don't have an account? " : "Already have an account? "}
               <button
@@ -144,24 +242,3 @@ function Startpage() {
 }
 
 export default Startpage;
-
-
-
-
-
-
-
-<div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex gap-10 text-center">
-           <div>
-             <p className="text-red-200 text-xl font-bold">0</p>
-            <p className="text-sm text-gray-100">Years Experience</p>
-          </div>
-           <div>
-            <p className="text-red-200 text-xl font-bold">2</p>
-            <p className="text-sm text-gray-100">Projects</p>
-</div>
-<div>
-        <p className="text-red-200 text-xl font-bold">0</p>
-            <p className="text-sm text-gray-100">Clients</p>
-          </div>
-        </div>

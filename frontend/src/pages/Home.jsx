@@ -5,9 +5,9 @@ import Hcard from '../components/Hcard';
 
 const Home = () => {
   const cards = [
-    { title: "Projects", description: "10" },
-    { title: "Certification", description: "10" },
-    { title: "Skills", description: "20" },
+    { title: "PROJECTS", description: "10" },
+    { title: "CERTIFICATION", description: "10" },
+    { title: "SKILL", description: "20" },
   ];
 
   return (

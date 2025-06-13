@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 function AboutMe() {
   const navigate = useNavigate();
 
+  
+
   return (
     <div className="w-screen h-screen overflow-x-auto flex snap-x snap-mandatory scroll-smooth">
       {/* Hero Section */}
@@ -58,12 +60,29 @@ function AboutMe() {
 
       {/* About Section */}
       <section className="min-w-full h-screen bg-[#1e293b] text-white flex flex-col items-center justify-center px-6 snap-center">
+        <div className="grid grid-cols-2 bg-slate-850 w-full h-screen">
+        <div className="relative mt-10 justify-center justify-items-center w-[758px] h-screen">
         <h2 className="text-3xl font-bold mb-4">About <span className="text-blue-400">Me</span></h2>
         <img src="/di.jpg" alt="Profile" className="w-28 h-28 mx-auto rounded-full mb-4 border-2 border-blue-400" />
         <p className="text-xl mb-4 font-semibold text-blue-300">FullStack Developer</p>
         <p className="text-gray-300 max-w-3xl text-center">
           I'm a Full Stack Developer skilled in React, Node.js, Django, and MySQL...
         </p>
+        </div >
+        
+        <div className="relative bg-slate-850  text-black justify-center justify-items-center w-[758px] h-screen">
+          <div className="flex-1 mt-14 bg-slate-900 w-[600px] h-[590px] justify-items-center rounded-xl"><span className="text-white font-mono">MY RESUME</span>
+                <img src="resume.png" alt="resume" className="flex bg-slate-500 w-[500px] h-[500px] rounded">
+                
+                </img>
+            <button className="bg-cyan-800 mt-3  mr-10 text-white px-4 py-2 rounded hover:bg-red-700 transition">Download</button>
+           <button className="bg-cyan-800 ml-20 text-white px-4 py-2 rounded hover:bg-red-700 ">See</button>  
+        </div>
+           
+          </div>
+        </div>
+        
+
       </section>
 
       {/* Contact Section */}
