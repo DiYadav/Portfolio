@@ -14,6 +14,7 @@ import Projects from './pages/Projects'
 import Experience from './components/Experience'
 import Proj from './components/Proj'
 import Skill from './components/Skill'
+import Profile from './pages/Profile'
 
 function Appcontent(){
   const location= useLocation()
@@ -24,7 +25,6 @@ function Appcontent(){
       <div flex-1 w-full>
         {!hideSidebar && <Sidebar/>}
         <Routes>
-         
           <Route path="/" element={<Startpage/>}/>
           <Route path="/Home" element={<Home/>}/>
           <Route path="/Skills" element={<Skills/>}/>
@@ -33,7 +33,8 @@ function Appcontent(){
           <Route path="/Experience" element={<Experience/>}/>
           <Route path="/Proj" element={<Proj/>}/>
           <Route path="/Skill" element={<Skill/>}/>
-           <Route path="/AboutMe" element={<AboutMe/>}/>
+          <Route path="/AboutMe" element={<AboutMe/>}/>
+          <Route path="/Profile" element={<Profile/>}/>
         </Routes>
       </div>
     );
