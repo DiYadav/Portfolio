@@ -1,47 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
-# from django.db import models
-# from django.contrib.auth import get_user_model
-
-
-
-# # Create your models here.
-# User = get_user_model()
-# class Profile(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     id_user = models.IntegerField()
-   
-
-#     def __str__(self):
-#         return self.user.username
-
 
 
 class UserProfile(models.Model):
-    profile=models.OneToOneField(User, on_delete=models.CASCADE)
-    id_user = models.IntegerField(default=1)
-    full_name=models.CharField(max_length=100)
-    email=models.EmailField(blank=True)
-    bio=models.TextField(blank=True)
-    profile_image=models.ImageField(upload_to='profile.images/', blank=True, null=True)
-    github=models.URLField(blank=True)
-    Linkdin=models.URLField(blank=True)
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=10, null=True, blank=True)
+    bio = models.TextField()
+    image = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
+    document = models.FileField(upload_to='documents/', null=True, blank=True)
+    links = models.JSONField(null=True, blank=True)  # For storing multiple links
 
     def __str__(self):
         return self.full_name
     
-# Education Model
+#Education Model
 class Education(models.Model):
-    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='educations')
-    degree = models.CharField(max_length=100)
-    institute = models.CharField(max_length=150)
-    year_start = models.IntegerField()
-    year_end = models.IntegerField(blank=True, null=True)
-    Location=models.CharField(max_length=50, blank=False, null=False)
+    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='educations',null=True)
+    year = models.IntegerField(null=True)
+    degree_institute = models.CharField(max_length=200, default='N/A')
+    location_result  = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.degree} at {self.institute}"
+        return f"{self.year} - {self.degree_institute}"
+
 
 # Experience Model
 class Experience(models.Model):
@@ -61,21 +44,27 @@ class Experience(models.Model):
 class Project(models.Model):
     profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='projects')
     Project_Year=models.DateField()
-    title = models.CharField(max_length=100)
-    description = models.TextField(max_length=100, blank=True, null=True )
-    link = models.URLField(blank=True)
-    contribute = models.CharField(max_length=50, blank=False, null=False)
+    Project_title = models.CharField(max_length=100)
+    contributer = models.CharField(max_length=50, blank=False, null=False)
+    details = models.TextField(max_length=100, blank=True, null=True )
+   
     def __str__(self):
-        return self.title
+        return self.Project_title
+    
+    # class Project(models.Model):
+    # year = models.CharField(max_length=10)
+    # title = models.CharField(max_length=255)
+    # location = models.CharField(max_length=255)
+    # details = models.TextField()
 
 # Skill Model
-class Skill(models.Model):
-    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='skills')
-    certificate=models.ImageField(upload_to="Certificate/", blank=True, null=True)
-    description = models.CharField(max_length=100)
-    skills = models.CharField(max_length=100)
-    proficiency = models.IntegerField( validators=[MinValueValidator(1), MaxValueValidator(100)],
-    help_text="Enter a value between 1 and 100")
+# class Skill(models.Model):
+#     profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='skills')
+#     certificate=models.ImageField(upload_to="Certificate/", blank=True, null=True)
+#     description = models.CharField(max_length=100)
+#     skills = models.CharField(max_length=100)
+#     proficiency = models.IntegerField( validators=[MinValueValidator(1), MaxValueValidator(100)],
+#     help_text="Enter a value between 1 and 100")
 
-    def __str__(self):
-        return f"{self.name} - {self.proficiency}%"
+#     def __str__(self):
+#         return f"{self.name} - {self.proficiency}%"

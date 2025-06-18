@@ -12,6 +12,9 @@ import Projects from './pages/Projects'
 import Experience from './components/Experience'
 import Proj from './components/Proj'
 import Skill from './components/Skill'
+import Profile from './Pages/Profile';
+import LoginRegister from './components/LoginRegister'
+import Logout from './components/Logout'
 import axios from 'axios'
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000'; // Django server URL
@@ -36,6 +39,9 @@ function Appcontent(){
           <Route path="/Proj" element={<Proj/>}/>
           <Route path="/Skill" element={<Skill/>}/>
           <Route path="/AboutMe" element={<AboutMe/>}/>
+          <Route path="/Profile" element={<Profile/>}/>
+          <Route path="/LoginRegister" element={<LoginRegister/>}/>
+          <Route path="/Logout" element={<Logout/>}/>
         </Routes>
       </div>
     );
