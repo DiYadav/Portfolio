@@ -4,6 +4,7 @@ import {BrowserRouter as Router,Routes,Route, useLocation} from 'react-router-do
 // import Mainlayout from './Pages/Mainlayout'
 import Home from './pages/Home'
 import AboutMe from './Pages/AboutMe'
+import ProtectedRoute from './components/ProtectedRoute'
 import Startpage from './Pages/Startpage'
 import Sidebar from './components/Sidebar'
 import Skills from './Pages/Skills'
@@ -14,7 +15,6 @@ import Proj from './components/Proj'
 import Skill from './components/Skill'
 import Profile from './Pages/Profile';
 import LoginRegister from './components/LoginRegister'
-import Logout from './components/Logout'
 import axios from 'axios'
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000'; // Django server URL
@@ -31,17 +31,16 @@ function Appcontent(){
         <Routes>
          
           <Route path="/" element={<Startpage/>}/>
-          <Route path="/Home" element={<Home/>}/>
-          <Route path="/Skills" element={<Skills/>}/>
-          <Route path="/Contact" element={<Contact/>}/>
-          <Route path="/Projects" element={<Projects/>}/>
-          <Route path="/Experience" element={<Experience/>}/>
-          <Route path="/Proj" element={<Proj/>}/>
-          <Route path="/Skill" element={<Skill/>}/>
+          <Route path="/Home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
+          <Route path="/Skills" element={<ProtectedRoute><Skills/></ProtectedRoute>}/>
+          <Route path="/Contact" element={<ProtectedRoute><Contact/></ProtectedRoute>}/>
+          <Route path="/Projects" element={<ProtectedRoute><Projects/></ProtectedRoute>}/>
+          <Route path="/Experience" element={<ProtectedRoute><Experience/></ProtectedRoute>}/>
+          <Route path="/Proj" element={<ProtectedRoute><Proj/></ProtectedRoute>}/>
+          <Route path="/Skill" element={<ProtectedRoute><Skill/></ProtectedRoute>}/>
           <Route path="/AboutMe" element={<AboutMe/>}/>
-          <Route path="/Profile" element={<Profile/>}/>
+          <Route path="/Profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
           <Route path="/LoginRegister" element={<LoginRegister/>}/>
-          <Route path="/Logout" element={<Logout/>}/>
         </Routes>
       </div>
     );
