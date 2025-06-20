@@ -2,11 +2,7 @@ import { useState } from "react";
 import { GraduationCap,FolderGit2, UserRoundCog } from "lucide-react"; 
 import Card from "../components/Card";
 import Experience from "../components/Experience";
-
 import Proj from '../components/Proj';
-
-
-
 
 const tabs = [
   { id: 0, label: "EDUCATION", icon: <GraduationCap className="w-5 h-5" /> },
@@ -16,7 +12,6 @@ const tabs = [
 
 function Projects() {
   const [activeTab, setActiveTab] = useState(0);
-
   return (
     <div className="absolute top-8 left-[500px] w-full max-w-md mx-auto mt-10">
       <div className="flex justify-around  border-gray-300">

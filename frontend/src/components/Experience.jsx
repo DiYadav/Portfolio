@@ -1,114 +1,169 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+const getCSRFToken = () => {
+  const name = "csrftoken";
+  const cookie = document.cookie
+    .split("; ")
+    .find((c) => c.startsWith(name + "="));
+  return cookie ? cookie.split("=")[1] : "";
+};
 
 const Experience = () => {
-  const [experiences, setExperiences] = useState([
-    {
-      year: '2024 - Present',
-      role: 'Frontend Developer - TechNova Pvt Ltd',
-      location: 'Pune, India',
-      details: 'React, Tailwind CSS, REST APIs',
-    },
-  ]);
-
+  const [experiences, setExperiences] = useState([]);
   const [formData, setFormData] = useState({
-    year: '',
-    role: '',
-    location: '',
-    details: '',
+    year: "",
+    role: "",
+    company: "",
+    location: "",
+    tech_details: "",
   });
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const fetchExperiences = () => {
+    axios
+      .get("http://localhost:8000/api/experiences/", { withCredentials: true })
+      .then((res) => setExperiences(res.data))
+      .catch((err) => console.error("Fetch failed", err));
+  };
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/csrf/", { credentials: "include" });
+    fetchExperiences();
+  }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleAdd = (e) => {
-    e.preventDefault();
-    if (formData.year && formData.role && formData.location && formData.details) {
-      setExperiences((prev) => [...prev, formData]);
-      setFormData({ year: '', role: '', location: '', details: '' });
+  const handleAdd = () => {
+    const { year, role, company, location, tech_details } = formData;
+    const cleanYear = year.replace(/\s+/g, "");
+
+    if (!cleanYear.match(/^\d{4}-\d{4}$/)) {
+      setErrorMsg("Year must be in YYYY-YYYY format.");
+      return;
     }
+
+    if (!role || !company || !location || !tech_details) {
+      setErrorMsg("All fields are required.");
+      return;
+    }
+
+    axios
+      .post(
+        "http://localhost:8000/api/experiences/",
+        { ...formData, year: cleanYear },
+        {
+          withCredentials: true,
+          headers: { "X-CSRFToken": getCSRFToken() },
+        }
+      )
+      .then((res) => {
+        setExperiences((prev) => [...prev, res.data]);
+        setFormData({
+          year: "",
+          role: "",
+          company: "",
+          location: "",
+          tech_details: "",
+        });
+        setErrorMsg("");
+      })
+      .catch((err) => {
+        console.error("Add failed", err.response?.data || err.message);
+        setErrorMsg("Error: " + JSON.stringify(err.response?.data || "Something went wrong"));
+      });
   };
 
-  const handleDelete = (index) => {
-    setExperiences((prev) => prev.filter((_, i) => i !== index));
-  };
+  const handleDelete = async (index, id) => {
+  try {
+    await axios.delete("http://localhost:8000/api/experiences/delete/", {
+      data: { id },
+      withCredentials: true,
+      headers: { "X-CSRFToken": getCSRFToken() },
+    });
+    const updated = [...experiences];
+    updated.splice(index, 1);
+    setExperiences(updated);
+  } catch (error) {
+    console.error("Delete failed", error);
+  }
+};
 
   return (
-    <div className="text-white flex w-[900px] right-11 mt-1 px-4">
-      <div className="bg-[#0f172a] p-6 rounded-md w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        {/* Left: Add Experience Form */}
-        <div>
-          <h2 className="text-xl font-bold mb-4">Add Experience</h2>
-          <form onSubmit={handleAdd} className="space-y-4">
-            <input
-              type="text"
-              name="year"
-              placeholder="Year (e.g., 2023 – 2024)"
-              value={formData.year}
-              onChange={handleChange}
-              className="w-full p-2 rounded bg-gray-700 text-white outline-none"
-            />
-            <input
-              type="text"
-              name="role"
-              placeholder="Role and Company"
-              value={formData.role}
-              onChange={handleChange}
-              className="w-full p-2 rounded bg-gray-700 text-white outline-none"
-            />
-            <input
-              type="text"
-              name="location"
-              placeholder="Location"
-              value={formData.location}
-              onChange={handleChange}
-              className="w-full p-2 rounded bg-gray-700 text-white outline-none"
-            />
-            <input
-              type="text"
-              name="details"
-              placeholder="Technologies or Details"
-              value={formData.details}
-              onChange={handleChange}
-              className="w-full p-2 rounded bg-gray-700 text-white outline-none"
-            />
-            <button
-              type="submit"
-              className="bg-cyan-500 hover:bg-cyan-600 text-white py-2 px-6 rounded"
-            >
-              Add
-            </button>
-          </form>
+    <div className="text-white mt-1">
+      <div className="bg-slate-900 flex w-[900px] h-[600px] p-6 max-w-6xl flex-col md:flex-row gap-6">
+        {/* Left: Form */}
+        <div className="md:w-1/2 space-y-4">
+          <h2 className="text-xl font-bold mb-2">Add Experience</h2>
+          {errorMsg && <p className="text-red-400 text-sm">{errorMsg}</p>}
+          <input
+            name="year"
+            value={formData.year}
+            onChange={handleChange}
+            placeholder="Year (e.g., 2020-2023)"
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
+          <input
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            placeholder="Role"
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
+          <input
+            name="company"
+            value={formData.company}
+            onChange={handleChange}
+            placeholder="Company"
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
+          <input
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            placeholder="Location"
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
+          <input
+            name="tech_details"
+            value={formData.tech_details}
+            onChange={handleChange}
+            placeholder="Technologies or Details"
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
+          <button
+            onClick={handleAdd}
+            className="bg-cyan-500 hover:bg-cyan-600 text-white py-2 px-4 rounded-md w-full"
+          >
+            Add Experience
+          </button>
         </div>
 
-        {/* Right: Experience List */}
-        <div>
-          <h2 className="text-xl font-bold mb-4 text-center">Experience</h2>
-          <div className="relative pl-6 h-[480px] overflow-y-auto scrollbar-hide pr-2">
-            <div className="absolute left-3 top-0 bottom-0 w-1 bg-cyan-400 rounded-full"></div>
-            {experiences.map((exp, index) => (
-              <div key={index} className="mb-6 flex items-start group">
-                <div className="w-4 h-4 bg-[#0f172a] border-4 border-cyan-400 rounded-full mt-2 mr-4 z-10"></div>
-                <div className="bg-gray-800 p-4 rounded-md w-full relative">
-                  <p className="text-cyan-400 font-semibold text-sm">{exp.year}</p>
-                  <h3 className="text-white font-bold">{exp.role}</h3>
-                  <p className="text-gray-300 text-sm">{exp.location}</p>
-                  <p className="text-gray-400 text-xs mt-1">{exp.details}</p>
-                  <button
-                    onClick={() => handleDelete(index)}
-                    className="absolute top-2 right-2 text-red-400 hover:text-red-600 text-sm"
-                    title="Delete"
-                  >
-                    ✕
-                  </button>
-                </div>
+        {/* Right: Timeline */}
+        <div className="md:w-1/2 relative overflow-y-auto scrollbar-hide pr-2 pl-6 h-[560px]">
+          <h2 className="text-xl font-bold mb-4">Experience Timeline</h2>
+          <div className="absolute left-3 top-10 bottom-0 w-1 bg-cyan-400 rounded-full"></div>
+          {experiences.map((exp, index) => (
+            <div key={exp.id} className="mb-8 flex items-start">
+              <div className="w-4 h-4 bg-[#0f172a] border-4 border-cyan-400 rounded-full mt-2 mr-4 z-10"></div>
+              <div className="bg-gray-800 p-4 rounded-md w-full relative">
+                <p className="text-cyan-400 font-semibold text-sm">{exp.year}</p>
+                <h3 className="text-white font-bold">{exp.role}</h3>
+                <h3 className="text-white font-bold">{exp.company}</h3>
+                <p className="text-gray-300 text-sm">{exp.location}</p>
+                <p className="text-gray-400 text-xs mt-1">{exp.tech_details}</p>
+                <button
+                  onClick={() => handleDelete(index, exp.id)}
+                  className="absolute top-2 right-2 text-red-400 hover:text-red-600"
+                >
+                  ✖
+                </button>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-
       </div>
     </div>
   );

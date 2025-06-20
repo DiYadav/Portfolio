@@ -1,40 +1,59 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+
+// Helper to get CSRF token from cookies
+const getCSRFToken = () => {
+  const name = "csrftoken";
+  const value = document.cookie
+    .split("; ")
+    .find(row => row.startsWith(name + "="));
+  return value ? value.split("=")[1] : "";
+};
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(null);
 
-  // Navigation links (excluding Logout here)
+  const profileImage = localStorage.getItem("profileImage");
   const navLinks = [
     { name: 'Home', path: '/Home' },
-    { name: 'Profile', path: '/Profile' },
+    { name: 'Profile', path: '/EditProfile' },
     { name: 'Projects', path: '/Projects' },
     { name: 'Skills', path: '/Skills' },
     { name: 'Contact', path: '/Contact' },
     { name: 'About me', path: '/AboutMe' },
   ];
 
-  const isActive = (path) => {
-    return location.pathname === path
+  const isActive = (path) =>
+    location.pathname === path
       ? 'bg-blue-100 text-blue-600 font-semibold'
       : 'text-gray-700';
-  };
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/api/my-profile/', {
+        withCredentials: true,
+      })
+      .then((res) => setProfile(res.data))
+      .catch((err) => console.error('Error fetching profile:', err));
+  }, []);
 
   const handleLogout = async () => {
     try {
-      // Make POST request to your Django logout endpoint
-      await axios.post('http://localhost:8000/logout/', {}, {
-        withCredentials: true, // Important for session-based auth
-        headers: {
-          'Content-Type': 'application/json',
+      await axios.post(
+        'http://localhost:8000/logout/',
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),
+          },
         }
-      });
-
-      // Clear local storage or session as needed
+      );
       localStorage.clear();
-
-      // Navigate to login/start page
       navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -44,14 +63,18 @@ const Sidebar = () => {
   return (
     <div className="relative h-screen w-[350px] bg-cyan-300 text-white flex flex-col items-center py-10 rounded-lg shadow-lg">
       {/* Profile Picture */}
-      <img
-        src="/dinesh.jpg"
-        alt="Profile"
-        className="w-32 h-32 rounded-full border-2 border-black shadow-md"
-      />
+      {profile?.image ? (
+        <img
+          src={profileImage || "/default.jpg"}
+          alt="Profile"
+          className="w-32 h-32 rounded-full border-2 border-black shadow-md object-cover"
+        />
+      ) : (
+        <div className="w-32 h-32 rounded-full border-2 border-black bg-gray-300" />
+      )}
 
       {/* Name and Role */}
-      <h1 className="mt-6 text-lg text-black font-serif">Dinesh Yadav</h1>
+      <h1 className="mt-6 text-lg text-black font-serif">{profile?.full_name || 'User Name'}</h1>
       <h2 className="mt-2 text-sm text-black font-serif">Backend Developer</h2>
 
       {/* Navigation Links */}

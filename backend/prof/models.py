@@ -1,9 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
+from django.core.validators import RegexValidator
 
 class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     full_name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=10, null=True, blank=True)
@@ -17,39 +18,49 @@ class UserProfile(models.Model):
     
 #Education Model
 class Education(models.Model):
-    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='educations',null=True)
-    year = models.IntegerField(null=True)
-    degree_institute = models.CharField(max_length=200, default='N/A')
-    location_result  = models.CharField(max_length=100, blank=True, null=True)
+    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='educations')
+    year = models.CharField(max_length=11,  validators=[
+            RegexValidator(
+                regex=r'^\d{4}-\d{4}$',
+                message='Year must be in YYYY-YYYY format (e.g., 2020-2023)'
+            )
+        ])
+    degree = models.CharField(max_length=200, default='N/A')
+    institute = models.CharField(max_length=200)
+    location = models.CharField(max_length=100, blank=True, null=True)
+    cgpa_marks = models.FloatField(null=False)
 
     def __str__(self):
-        return f"{self.year} - {self.degree_institute}"
+        return f"{self.start_year}-{self.end_year} - {self.degree} at {self.institute}"
 
 
-# Experience Model
+# # Experience Model
 class Experience(models.Model):
     profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='experiences')
-    Role = models.CharField(max_length=100)
+    year = models.CharField(max_length=11,  validators=[
+            RegexValidator(
+                regex=r'^\d{4}-\d{4}$',
+                message='Year must be in YYYY-YYYY format (e.g., 2020-2023)'
+            )
+        ])
+    role = models.CharField(max_length=100)
     company = models.CharField(max_length=100)
-    description = models.TextField(max_length=100, blank=True, null=True)
-    start_date = models.DateField()
-    end_date = models.DateField(blank=True, null=True)
-    Location = models.CharField(max_length=50, blank=False, null=False)
-    details=models.CharField(max_length=50, blank=True, null=False)
+    location = models.CharField(max_length=50)
+    tech_details=models.CharField(max_length=50, blank=True)
 
     def __str__(self):
-        return f"{self.title} at {self.company}"
+        return f"{self.role} at {self.company}"
 
-# Project Model
-class Project(models.Model):
-    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='projects')
-    Project_Year=models.DateField()
-    Project_title = models.CharField(max_length=100)
-    contributer = models.CharField(max_length=50, blank=False, null=False)
-    details = models.TextField(max_length=100, blank=True, null=True )
+# # Project Model
+# class Project(models.Model):
+#     profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='projects')
+#     Project_Year=models.DateField()
+#     Project_title = models.CharField(max_length=100)
+#     contributer = models.CharField(max_length=50, blank=False, null=False)
+#     details = models.TextField(max_length=100, blank=True, null=True )
    
-    def __str__(self):
-        return self.Project_title
+#     def __str__(self):
+#         return self.Project_title
     
     # class Project(models.Model):
     # year = models.CharField(max_length=10)
