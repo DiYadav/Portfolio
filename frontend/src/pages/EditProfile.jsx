@@ -18,6 +18,7 @@ const EditProfile = () => {
     email: '',
     phone: '',
     bio: '',
+    position:'',
   });
 
   const [photo, setPhoto] = useState(null);
@@ -42,6 +43,7 @@ const EditProfile = () => {
           email: data.email || '',
           phone: data.phone || '',
           bio: data.bio || '',
+          position:data.position || '',
         });
         setLinks(data.links || ['']);
         if (data.image) setExistingPhotoURL(`http://localhost:8000${data.image}`);
@@ -71,6 +73,7 @@ const EditProfile = () => {
     formDataToSend.append("email", formData.email);
     formDataToSend.append("phone", formData.phone);
     formDataToSend.append("bio", formData.bio);
+    formDataToSend.append("position", formData.position);
     formDataToSend.append("links", JSON.stringify(links));
     if (photo) formDataToSend.append("image", photo);
     if (resume) formDataToSend.append("document", resume);
@@ -104,7 +107,7 @@ const EditProfile = () => {
           ) : null}
           <input type="file" accept="image/*" onChange={handlePhotoChange} className="block w-full text-sm text-gray-500 file:py-2 file:px-4 file:rounded-md file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
         </div>
-
+        <input type="text" name="position" value={formData.position} onChange={handleChange} placeholder="Your Role" className="w-full p-3 bg-gray-700 text-white rounded-md" />
         <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} placeholder="Full Name" className="w-full p-3 bg-gray-700 text-white rounded-md" />
         <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" className="w-full p-3 bg-gray-700 text-white rounded-md" />
         <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number" className="w-full p-3 bg-gray-700 text-white rounded-md" />

@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path
 from . import views
 
@@ -12,6 +11,12 @@ urlpatterns = [
     path('api/educations/delete/', views.delete_education),
     path('api/experiences/', views.experience_list_create),
     path('api/experiences/delete/', views.delete_experience),
-#     path('experiences/', views.experience_list_create),
-#     path('projects/', views.project_list_create),
- ]
+    path('api/projects/', views.project_list_create),
+    path('api/projects/delete/', views.delete_project),
+    path('api/skills/', views.skills_list_create),
+    path('api/skills/delete/', views.delete_skills),
+    path('api/myskills/', views.myskills_list_create),
+#     path('api/skill/delete/', views.delete_skill),
+    path('api/myskills/', views.myskills_list_create),
+    path('api/myskills/delete/', views.delete_myskills),
+  ]

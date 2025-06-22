@@ -1,42 +1,88 @@
-import React, { useState } from 'react';
-import Skill from '../components/Skill';
+import React, { useState, useEffect, useRef  } from "react";
+import axios from "axios";
+import Myskills from '../components/Myskills'
+
+
+const getCSRFToken = () => {
+  const name = "csrftoken";
+  const cookie = document.cookie
+    .split("; ")
+    .find((c) => c.startsWith(name + "="));
+  return cookie ? cookie.split("=")[1] : "";
+};
 
 const Skills = () => {
-  const [certificates, setCertificates] = useState([
-    {
-      id: 1,
-      image: 'https://via.placeholder.com/200',
-      description: 'Certificate 1 Description',
-    },
-    {
-      id: 2,
-      image: 'https://via.placeholder.com/200',
-      description: 'Certificate 2 Description',
-    },
-    {
-      id: 3,
-      image: 'https://via.placeholder.com/200',
-      description: 'Certificate 3 Description',
-    },
-  ]);
-
-  const [newCertificate, setNewCertificate] = useState({ image: '', description: '' });
+  const [certificates, setCertificates] = useState([]);
+  const [newCertificate, setNewCertificate] = useState({ certificate: "", description: "" });
   const [selectedId, setSelectedId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalCertificate, setModalCertificate] = useState(null);
+  const BASE_URL = "http://localhost:8000";
+  const [addPopup, setAddPopup] = useState(false); 
+  const [deletePopup, setDeletePopup] = useState(false);
+  const fileInputRef = useRef(null); 
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/csrf/", { credentials: "include" }); // hit CSRF route
+    fetchCertificates();
+  }, []);
+
+  const fetchCertificates = () => {
+    axios
+      .get("http://localhost:8000/api/skills/", { withCredentials: true })
+      .then((res) => setCertificates(res.data))
+      .catch((err) => console.error("Fetch error:", err));
+  };
 
   const handleAdd = () => {
-    if (!newCertificate.image || !newCertificate.description) return;
-    const newCert = { ...newCertificate, id: Date.now() };
-    setCertificates([newCert, ...certificates]);
-    setNewCertificate({ image: '', description: '' });
+    if (!newCertificate.certificate || !newCertificate.description) {
+      alert("Both fields required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("certificate", newCertificate.certificate);
+    formData.append("description", newCertificate.description);
+
+    axios
+      .post("http://localhost:8000/api/skills/", formData, {
+        withCredentials: true,
+        headers: {
+          "X-CSRFToken": getCSRFToken(),
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        setCertificates((prev) => [res.data, ...prev]);
+        setNewCertificate({ certificate: "", description: "" });
+        fileInputRef.current.value = null;
+        setAddPopup(true);
+        setTimeout(() => setAddPopup(false), 2000);
+      })
+      .catch((err) => {
+        console.error("Add failed:", err);
+      });
+      
   };
 
   const handleDelete = () => {
-    if (selectedId !== null) {
-      setCertificates(certificates.filter((cert) => cert.id !== selectedId));
-      setSelectedId(null);
-    }
+    if (!selectedId) return;
+
+    axios
+      .delete("http://localhost:8000/api/skills/delete/", {
+        withCredentials: true,
+        headers: { "X-CSRFToken": getCSRFToken() },
+        data: { id: selectedId },
+      })
+      .then(() => {
+        setCertificates((prev) => prev.filter((cert) => cert.id !== selectedId));
+        setSelectedId(null);
+      })
+      .catch((err) => {
+        console.error("Delete failed:", err);
+      });
+        setDeletePopup(true);
+        setTimeout(() => setDeletePopup(false), 2000);
   };
 
   const handleSee = (certificate) => {
@@ -54,40 +100,25 @@ const Skills = () => {
       <h2 className="text-2xl font-bold mb-4">Certificates</h2>
 
       <div className="flex w-[1160px] bg-slate-900 pb-4 rounded-lg">
-        {/* Scrollable Section */}
         <div className="flex overflow-x-auto scrollbar-hide space-x-4 pr-4 w-[880px]">
           {certificates.map((cert) => (
             <div
               key={cert.id}
-              className={`min-w-[278px] h-[250px] bg-[#1e293b] p-4 rounded-xl flex-shrink-0 transition-all duration-300 ${
-                selectedId === cert.id ? 'border-4 border-blue-400' : ''
+              className={`min-w-[278px] h-[250px] bg-[#1e293b] p-4 rounded-xl flex-shrink-0 ${
+                selectedId === cert.id ? "border-4 border-blue-400" : ""
               }`}
               onClick={() => setSelectedId(cert.id)}
             >
               <div className="flex flex-col h-full justify-between">
-                <img
-                  src={cert.image}
-                  alt="Certificate"
-                  className="h-32 object-cover rounded-md mb-2"
-                />
+                <img src={`${BASE_URL}${cert.certificate}`} alt="Certificate" className="h-32 object-cover rounded-md mb-2" />
                 <p className="text-sm mb-2">{cert.description}</p>
                 <div className="flex space-x-2">
                   <button
                     className="bg-blue-500 px-3 py-1 rounded-md text-white"
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (navigator.share) {
-                        navigator
-                          .share({
-                            title: 'Certificate',
-                            text: cert.description,
-                            url: cert.image,
-                          })
-                          .catch((error) => console.error('Error sharing', error));
-                      } else {
-                        navigator.clipboard.writeText(cert.image);
-                        alert('Link copied to clipboard! (Browser does not support sharing)');
-                      }
+                      navigator.clipboard.writeText(cert.certificate);
+                      alert("Link copied to clipboard!");
                     }}
                   >
                     Share
@@ -107,39 +138,25 @@ const Skills = () => {
           ))}
         </div>
 
-        {/* Add/Delete Section */}
         <div className="w-[280px] h-[250px] bg-[#1e293b] p-4 rounded-xl flex-shrink-0 flex flex-col justify-between ml-auto">
-          <div>
-            {/* File Input for Image */}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setNewCertificate({ ...newCertificate, image: reader.result });
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
-              className="w-full p-2 mb-2 rounded bg-slate-700 text-white"
-            />
-
-            {/* Description Input */}
-            <input
-              type="text"
-              placeholder="Description"
-              value={newCertificate.description}
-              onChange={(e) =>
-                setNewCertificate({ ...newCertificate, description: e.target.value })
-              }
-              className="w-full p-2 mb-2 rounded bg-slate-700 text-white placeholder-gray-300"
-            />
-          </div>
-
-          {/* Buttons */}
+         <input
+  ref={fileInputRef}
+  type="file"
+  accept="image/*"
+  onChange={(e) =>
+    setNewCertificate({ ...newCertificate, certificate: e.target.files[0] })
+  }
+  className="w-full p-2 mb-2 rounded bg-slate-700 text-white"
+/>
+          <input
+            type="text"
+            placeholder="Description"
+            value={newCertificate.description}
+            onChange={(e) =>
+              setNewCertificate({ ...newCertificate, description: e.target.value })
+            }
+            className="w-full p-2 mb-2 rounded bg-slate-700 text-white"
+          />
           <div className="flex space-x-2">
             <button onClick={handleAdd} className="bg-green-600 px-3 py-1 rounded-md w-1/2">
               Add
@@ -151,10 +168,9 @@ const Skills = () => {
         </div>
       </div>
 
-      {/* Modal */}
       {showModal && modalCertificate && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <div className="bg-slate-900 ml[900px] text-black p-6 rounded-xl shadow-xl w-[700px] h-[500px] max-w-[90%] relative">
+          <div className="bg-slate-900 text-black p-6 rounded-xl shadow-xl w-[700px] h-[500px] max-w-[90%] relative">
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 text-white bg-red-600 px-2 py-1 rounded"
@@ -162,7 +178,7 @@ const Skills = () => {
               Close
             </button>
             <img
-              src={modalCertificate.image}
+              src={`${BASE_URL}${modalCertificate.certificate}`}
               alt="Certificate"
               className="w-full h-[400px] object-contain rounded mb-4"
             />
@@ -170,9 +186,28 @@ const Skills = () => {
           </div>
         </div>
       )}
-      <Skill/>
+
+      
+      {addPopup && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h3 className="text-lg font-bold text-green-600 mb-2">Certificate Added!</h3>
+            <p className="text-gray-700 mb-4">Your changes have been saved successfully.</p>
+            <button onClick={() => { setAddPopup(false); }} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Close</button>
+          </div>
+        </div>
+      )}
+      {deletePopup && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h3 className="text-lg font-bold text-red-600 mb-2">Certificate Deleted!</h3>
+            <p className="text-gray-700 mb-4">Your changes have been saved successfully.</p>
+            <button onClick={() => { setDeletePopup(false); }} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Close</button>
+          </div>
+        </div>
+      )}
+      <Myskills/>
     </div>
-    
   );
 };
 

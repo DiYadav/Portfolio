@@ -20,7 +20,7 @@ const Sidebar = () => {
   const navLinks = [
     { name: 'Home', path: '/Home' },
     { name: 'Profile', path: '/EditProfile' },
-    { name: 'Projects', path: '/Projects' },
+    { name: 'Career Overview', path: '/Projects' },
     { name: 'Skills', path: '/Skills' },
     { name: 'Contact', path: '/Contact' },
     { name: 'About me', path: '/AboutMe' },
@@ -36,8 +36,18 @@ const Sidebar = () => {
       .get('http://localhost:8000/api/my-profile/', {
         withCredentials: true,
       })
-      .then((res) => setProfile(res.data))
-      .catch((err) => console.error('Error fetching profile:', err));
+      .then((res) =>{
+        setProfile(res.data);
+      if(res.data.image){
+        localStorage.setItem("profileImage",res.data.image);
+      }
+      else{
+          localStorage.removeItem("profileImage");
+      }
+      })
+      .catch((err) =>{
+        console.error('Error fetching profile:', err);
+      });
   }, []);
 
   const handleLogout = async () => {
@@ -54,6 +64,7 @@ const Sidebar = () => {
         }
       );
       localStorage.clear();
+      setProfile(null);   
       navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -65,7 +76,7 @@ const Sidebar = () => {
       {/* Profile Picture */}
       {profile?.image ? (
         <img
-          src={profileImage || "/default.jpg"}
+          src={`http://localhost:8000${profile.image}`}
           alt="Profile"
           className="w-32 h-32 rounded-full border-2 border-black shadow-md object-cover"
         />
@@ -75,7 +86,7 @@ const Sidebar = () => {
 
       {/* Name and Role */}
       <h1 className="mt-6 text-lg text-black font-serif">{profile?.full_name || 'User Name'}</h1>
-      <h2 className="mt-2 text-sm text-black font-serif">Backend Developer</h2>
+      <h2 className="mt-2 text-sm text-black font-serif">{profile?.position || 'Software Developer'}</h2>
 
       {/* Navigation Links */}
       <nav className="mt-10 w-full items-center px-6 space-y-4">

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.core.validators import RegexValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
@@ -12,6 +13,7 @@ class UserProfile(models.Model):
     image = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
     document = models.FileField(upload_to='documents/', null=True, blank=True)
     links = models.JSONField(null=True, blank=True)  # For storing multiple links
+    position=models.CharField(max_length=100, null=True, blank=True )
 
     def __str__(self):
         return self.full_name
@@ -51,31 +53,39 @@ class Experience(models.Model):
     def __str__(self):
         return f"{self.role} at {self.company}"
 
-# # Project Model
-# class Project(models.Model):
-#     profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='projects')
-#     Project_Year=models.DateField()
-#     Project_title = models.CharField(max_length=100)
-#     contributer = models.CharField(max_length=50, blank=False, null=False)
-#     details = models.TextField(max_length=100, blank=True, null=True )
+# Project Model
+class Project(models.Model):
+    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='projects')
+    year=models.CharField(max_length=11, validators=[
+        RegexValidator(
+            regex=r'^\d{4}-\d{4}$',
+            message='Year Must be in YYYY-YYYY format(e.g., 2022-2023)'
+        )
+    ])
+    title = models.CharField(max_length=100)
+    location=models.CharField(max_length=50)
+    contributer = models.CharField(max_length=50, blank=False, null=False)
+    details = models.TextField(max_length=100, blank=True, null=True )
    
-#     def __str__(self):
-#         return self.Project_title
+    def __str__(self):
+        return self.title
     
-    # class Project(models.Model):
-    # year = models.CharField(max_length=10)
-    # title = models.CharField(max_length=255)
-    # location = models.CharField(max_length=255)
-    # details = models.TextField()
+#Skill Model
+class Skills(models.Model):
+    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='skills')
+    certificate=models.ImageField(upload_to="Certificate/", blank=True, null=True)
+    description = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.description
+    
+class Myskills(models.Model):
+    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='myskills')
+    skills = models.CharField(max_length=100)  # Skill name
+    proficiency = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(100)],
+        help_text="Enter a value between 1 and 100"
+    )
 
-# Skill Model
-# class Skill(models.Model):
-#     profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='skills')
-#     certificate=models.ImageField(upload_to="Certificate/", blank=True, null=True)
-#     description = models.CharField(max_length=100)
-#     skills = models.CharField(max_length=100)
-#     proficiency = models.IntegerField( validators=[MinValueValidator(1), MaxValueValidator(100)],
-#     help_text="Enter a value between 1 and 100")
-
-#     def __str__(self):
-#         return f"{self.name} - {self.proficiency}%"
+    def __str__(self):
+        return f"{self.skills} ({self.proficiency}%)"

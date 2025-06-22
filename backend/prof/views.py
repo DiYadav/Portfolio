@@ -35,16 +35,16 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from .models import UserProfile
 from .serializers import UserProfileSerializer
+from .serializers import *
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
-
 
 
 @ensure_csrf_cookie
 def get_csrf_token(request):
     return JsonResponse({'message': 'CSRF cookie set'})
 
-
+#Myprofile Section-------------------------------------
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser, FormParser])
@@ -68,19 +68,11 @@ def my_profile_view(request):
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#----------------------------------------Project-----------------------------------------
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from .models import Education
-from .serializers import EducationSerializer
-
-
-
+#education Section---------------------------------------
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def education_list_create(request):
-    print(">> Incoming Data POST:", request.data)
+    #print(">> Incoming Data POST:", request.data)
     if request.method == 'GET':
         educations = Education.objects.filter(profile=request.user.profile)
         serializer = EducationSerializer(educations, many=True)
@@ -107,10 +99,6 @@ def education_list_create(request):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
-    
-
-
 @api_view(['DELETE'])
 @permission_classes([permissions.IsAuthenticated])
 def delete_education(request):
@@ -124,22 +112,7 @@ def delete_education(request):
     except Education.DoesNotExist:
         return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
     
-
-# @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
-# def experience_list_create(request):
-#     if request.method == 'GET':
-#         experiences = Experience.objects.filter(profile=request.user.userprofile)
-#         serializer = ExperienceSerializer(experiences, many=True)
-#         return Response(serializer.data)
-
-#     if request.method == 'POST':
-#         serializer = ExperienceSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save(profile=request.user.userprofile)
-#             return Response(serializer.data, status=201)
-#         return Response(serializer.errors, status=400)
-
+#Experience Section---------------------------------
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def experience_list_create(request):
@@ -174,53 +147,100 @@ def delete_experience(request):
     experience.delete()
     return Response({'message': 'Experience deleted successfully'})
 
+#Project Section-----------------------------------------------------------
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def project_list_create(request):
+    if request.method == 'GET':
+        projects = Project.objects.filter(profile=request.user.profile)
+        serializer = ProjectSerializer(projects, many=True)
+        return Response(serializer.data)
 
-# @api_view(['GET', 'POST', 'DELETE'])
-# @permission_classes([permissions.IsAuthenticated])
-# def experience_list_create_delete(request):
-#     if request.method == 'GET':
-#         experiences = Experience.objects.filter(profile=request.user.profile)
-#         serializer = ExperienceSerializer(experiences, many=True)
-#         return Response(serializer.data)
+    if request.method == 'POST':
+        data = request.data.copy()
+        data['profile'] = request.user.profile.id  # Use profile like Education
+        serializer = ProjectSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#     elif request.method == 'POST':
-#         data = request.data.copy()
-#         data['profile'] = request.user.profile.id
-#         serializer = ExperienceSerializer(data=data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_project(request):
+    project_id = request.data.get('id')
+    if not project_id:
+        return Response({"error": "ID is required"}, status=400)
+    try:
+        project = Project.objects.get(id=project_id, profile=request.user.profile)
+        project.delete()
+        return Response({"message": "Deleted successfully"}, status=204)
+    except Project.DoesNotExist:
+        return Response({"error": "Project not found"}, status=404)
 
-#     elif request.method == 'DELETE':
-#         exp_id = request.data.get("id")
-#         if not exp_id:
-#             return Response({"error": "Experience ID is required to delete."}, status=status.HTTP_400_BAD_REQUEST)
+#Skills Section--------------------------------------------
 
-#         try:
-#             exp = Experience.objects.get(id=exp_id, profile=request.user.profile)
-#             exp.delete()
-#             return Response({"message": "Deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
-#         except Experience.DoesNotExist:
-#             return Response({"error": "Experience not found."}, status=status.HTTP_404_NOT_FOUND)
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def skills_list_create(request):
+    if request.method == 'GET':
+        skills = Skills.objects.filter(profile__user=request.user)
+        serializer = SkillsSerializer(skills, many=True)
+        return Response(serializer.data)
 
+    elif request.method == 'POST':
+        serializer = SkillsSerializer(data=request.data)
+        if serializer.is_valid():
+            profile = request.user.profile  # Adjust this if profile model is related differently
+            serializer.save(profile=profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# @api_view(['GET', 'POST'])
-# def project_list_create(request):
-#     if request.method == 'GET':
-#         projects = Project.objects.all()
-#         serializer = ProjectSerializer(projects, many=True)
-#         return Response(serializer.data)
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_skills(request):
+    skill_id = request.data.get("id")
+    try:
+        skill = Skills.objects.get(id=skill_id, profile=request.user.profile)
+        skill.delete()
+        return Response({"message": "Deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+    except Skills.DoesNotExist:
+        return Response({"error": "Skill not found"}, status=status.HTTP_404_NOT_FOUND)
 
-#     elif request.method == 'POST':
-#         serializer = ProjectSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+@api_view(['GET', 'POST'])
+def myskills_list_create(request):
+    if request.method == 'GET':
+        # Assuming profile is fetched from authenticated user
+        user_profile = get_object_or_404(UserProfile, user=request.user)
+        skills = Myskills.objects.filter(profile=user_profile)
+        serializer = MyskillsSerializer(skills, many=True)
+        return Response(serializer.data)
 
+    elif request.method == 'POST':
+        user_profile = get_object_or_404(UserProfile, user=request.user)
+        data = request.data.copy()
+        data['profile'] = user_profile.id
+        serializer = MyskillsSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_myskills(request):
+    skill_id = request.data.get("id")
+    if not skill_id:
+        return Response({"error": "Skill ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        skill = Myskills.objects.get(id=skill_id, profile=request.user.profile)
+        skill.delete()
+        return Response({"message": "Deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+    except Myskills.DoesNotExist:
+        return Response({"error": "Skill not found"}, status=status.HTTP_404_NOT_FOUND)
+
+#login Section---------------------------------------
 @api_view(['POST'])
 def register(request):
     username = request.data.get('username')
@@ -277,27 +297,6 @@ def user_login(request):
         return Response({"error": "Invalid username or password."}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-# @api_view(['POST'])
-# def login(request):
-#     username = request.data.get('username')
-#     password = request.data.get('password')
-
-#     user = auth.authenticate(username=username, password=password)
-
-#     if user:
-#         auth.login(request, user)
-#         profile = getattr(user, 'userprofile', None)
-
-#         return Response({
-#             "message": "Login successful",
-#             "user_id": user.id,
-#             "profile_id": profile.id if profile else None,
-#             "username": user.username,
-#             "email": user.email,
-#         }, status=status.HTTP_200_OK)
-#     else:
-#         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-
 @csrf_exempt
 @require_POST
 def user_login(request):
@@ -321,35 +320,6 @@ def user_login(request):
         return JsonResponse({"error": "Invalid credentials"}, status=401)
 
 
-# @api_view(['POST'])
-# def register(request):
-#     username = request.data.get('username')
-#     email = request.data.get('email')
-#     password = request.data.get('password')
-#     password2 = request.data.get('password2')
-
-#     if password != password2:
-#         return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
-
-#     if User.objects.filter(email=email).exists():
-#         return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
-
-#     if User.objects.filter(username=username).exists():
-#         return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
-
-#     user = User.objects.create_user(username=username, email=email, password=password)
-#     user.save()
-
-#     # Optional login after registration
-#     user_login = auth.authenticate(username=username, password=password)
-#     auth.login(request, user_login)
-
-#     # Correct profile field
-#     new_profile = UserProfile.objects.create(profile=user, id_user=user.id)
-#     new_profile.save()
-
-#     return Response({'message': 'User registered successfully', 'username': username}, status=status.HTTP_201_CREATED)
-
 # @login_required(login_url='login')
 # def features(request):
 #     return render(request,'features.html')
@@ -364,15 +334,6 @@ def user_login(request):
 # def about(request):
 #     return render(request, 'about.html')
 
-
-
-# @login_required(login_url='login')
-# def logout(request):
-#     auth.logout(request)
-#     return redirect('login')
-from django.contrib.auth import logout
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
 
 @csrf_exempt
 def logout_view(request):

@@ -12,7 +12,7 @@ import Contact from './Pages/Contact'
 import Projects from './pages/Projects'
 import Experience from './components/Experience'
 import Proj from './components/Proj'
-import Skill from './components/Skill'
+import Myskills from './components/Myskills'
 import EditProfile from './Pages/EditProfile'
 import LoginRegister from './components/LoginRegister'
 import axios from 'axios'
@@ -37,7 +37,7 @@ function Appcontent(){
           <Route path="/Projects" element={<ProtectedRoute><Projects/></ProtectedRoute>}/>
           <Route path="/Experience" element={<ProtectedRoute><Experience/></ProtectedRoute>}/>
           <Route path="/Proj" element={<ProtectedRoute><Proj/></ProtectedRoute>}/>
-          <Route path="/Skill" element={<ProtectedRoute><Skill/></ProtectedRoute>}/>
+          <Route path="/Myskills" element={<ProtectedRoute><Myskills/></ProtectedRoute>}/>
           <Route path="/AboutMe" element={<AboutMe/>}/>
           <Route path="/EditProfile" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>
           <Route path="/LoginRegister" element={<LoginRegister/>}/>
