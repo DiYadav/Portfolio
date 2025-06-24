@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef  } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import Myskills from '../components/Myskills'
-
+import Myskills from "../components/Myskills";
 
 const getCSRFToken = () => {
   const name = "csrftoken";
@@ -13,14 +12,17 @@ const getCSRFToken = () => {
 
 const Skills = () => {
   const [certificates, setCertificates] = useState([]);
-  const [newCertificate, setNewCertificate] = useState({ certificate: "", description: "" });
+  const [newCertificate, setNewCertificate] = useState({
+    certificate: "",
+    description: "",
+  });
   const [selectedId, setSelectedId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalCertificate, setModalCertificate] = useState(null);
   const BASE_URL = "http://localhost:8000";
-  const [addPopup, setAddPopup] = useState(false); 
+  const [addPopup, setAddPopup] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
-  const fileInputRef = useRef(null); 
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     fetch("http://localhost:8000/api/csrf/", { credentials: "include" }); // hit CSRF route
@@ -62,7 +64,6 @@ const Skills = () => {
       .catch((err) => {
         console.error("Add failed:", err);
       });
-      
   };
 
   const handleDelete = () => {
@@ -75,14 +76,16 @@ const Skills = () => {
         data: { id: selectedId },
       })
       .then(() => {
-        setCertificates((prev) => prev.filter((cert) => cert.id !== selectedId));
+        setCertificates((prev) =>
+          prev.filter((cert) => cert.id !== selectedId)
+        );
         setSelectedId(null);
       })
       .catch((err) => {
         console.error("Delete failed:", err);
       });
-        setDeletePopup(true);
-        setTimeout(() => setDeletePopup(false), 2000);
+    setDeletePopup(true);
+    setTimeout(() => setDeletePopup(false), 2000);
   };
 
   const handleSee = (certificate) => {
@@ -93,6 +96,23 @@ const Skills = () => {
   const closeModal = () => {
     setShowModal(false);
     setModalCertificate(null);
+  };
+
+  const handleShare = (cert) => {
+    const fullUrl = `${BASE_URL}${cert.certificate}`;
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "My Certificate",
+          text: cert.description,
+          url: fullUrl,
+        })
+        .then(() => console.log("Shared successfully"))
+        .catch((error) => console.error("Error sharing", error));
+    } else {
+      navigator.clipboard.writeText(fullUrl);
+      alert("Link copied to clipboard!");
+    }
   };
 
   return (
@@ -110,15 +130,18 @@ const Skills = () => {
               onClick={() => setSelectedId(cert.id)}
             >
               <div className="flex flex-col h-full justify-between">
-                <img src={`${BASE_URL}${cert.certificate}`} alt="Certificate" className="h-32 object-cover rounded-md mb-2" />
+                <img
+                  src={`${BASE_URL}${cert.certificate}`}
+                  alt="Certificate"
+                  className="h-32 object-cover rounded-md mb-2"
+                />
                 <p className="text-sm mb-2">{cert.description}</p>
                 <div className="flex space-x-2">
                   <button
                     className="bg-blue-500 px-3 py-1 rounded-md text-white"
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigator.clipboard.writeText(cert.certificate);
-                      alert("Link copied to clipboard!");
+                      handleShare(cert);
                     }}
                   >
                     Share
@@ -139,29 +162,41 @@ const Skills = () => {
         </div>
 
         <div className="w-[280px] h-[250px] bg-[#1e293b] p-4 rounded-xl flex-shrink-0 flex flex-col justify-between ml-auto">
-         <input
-  ref={fileInputRef}
-  type="file"
-  accept="image/*"
-  onChange={(e) =>
-    setNewCertificate({ ...newCertificate, certificate: e.target.files[0] })
-  }
-  className="w-full p-2 mb-2 rounded bg-slate-700 text-white"
-/>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              setNewCertificate({
+                ...newCertificate,
+                certificate: e.target.files[0],
+              })
+            }
+            className="w-full p-2 mb-2 rounded bg-slate-700 text-white"
+          />
           <input
             type="text"
             placeholder="Description"
             value={newCertificate.description}
             onChange={(e) =>
-              setNewCertificate({ ...newCertificate, description: e.target.value })
+              setNewCertificate({
+                ...newCertificate,
+                description: e.target.value,
+              })
             }
             className="w-full p-2 mb-2 rounded bg-slate-700 text-white"
           />
           <div className="flex space-x-2">
-            <button onClick={handleAdd} className="bg-green-600 px-3 py-1 rounded-md w-1/2">
+            <button
+              onClick={handleAdd}
+              className="bg-green-600 px-3 py-1 rounded-md w-1/2"
+            >
               Add
             </button>
-            <button onClick={handleDelete} className="bg-red-600 px-3 py-1 rounded-md w-1/2">
+            <button
+              onClick={handleDelete}
+              className="bg-red-600 px-3 py-1 rounded-md w-1/2"
+            >
               Delete
             </button>
           </div>
@@ -182,31 +217,54 @@ const Skills = () => {
               alt="Certificate"
               className="w-full h-[400px] object-contain rounded mb-4"
             />
-            <p className="text-lg font-medium text-white">{modalCertificate.description}</p>
+            <p className="text-lg font-medium text-white">
+              {modalCertificate.description}
+            </p>
           </div>
         </div>
       )}
 
-      
       {addPopup && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-            <h3 className="text-lg font-bold text-green-600 mb-2">Certificate Added!</h3>
-            <p className="text-gray-700 mb-4">Your changes have been saved successfully.</p>
-            <button onClick={() => { setAddPopup(false); }} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Close</button>
+            <h3 className="text-lg font-bold text-green-600 mb-2">
+              Certificate Added!
+            </h3>
+            <p className="text-gray-700 mb-4">
+              Your changes have been saved successfully.
+            </p>
+            <button
+              onClick={() => {
+                setAddPopup(false);
+              }}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
       {deletePopup && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-            <h3 className="text-lg font-bold text-red-600 mb-2">Certificate Deleted!</h3>
-            <p className="text-gray-700 mb-4">Your changes have been saved successfully.</p>
-            <button onClick={() => { setDeletePopup(false); }} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Close</button>
+            <h3 className="text-lg font-bold text-red-600 mb-2">
+              Certificate Deleted!
+            </h3>
+            <p className="text-gray-700 mb-4">
+              Your changes have been saved successfully.
+            </p>
+            <button
+              onClick={() => {
+                setDeletePopup(false);
+              }}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
-      <Myskills/>
+      <Myskills />
     </div>
   );
 };

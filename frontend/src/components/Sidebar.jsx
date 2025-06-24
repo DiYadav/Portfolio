@@ -22,7 +22,6 @@ const Sidebar = () => {
     { name: 'Profile', path: '/EditProfile' },
     { name: 'Career Overview', path: '/Projects' },
     { name: 'Skills', path: '/Skills' },
-    { name: 'Contact', path: '/Contact' },
     { name: 'About me', path: '/AboutMe' },
   ];
 

@@ -8,7 +8,6 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Startpage from './Pages/Startpage'
 import Sidebar from './components/Sidebar'
 import Skills from './Pages/Skills'
-import Contact from './Pages/Contact'
 import Projects from './pages/Projects'
 import Experience from './components/Experience'
 import Proj from './components/Proj'
@@ -33,7 +32,6 @@ function Appcontent(){
           <Route path="/" element={<Startpage/>}/>
           <Route path="/Home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
           <Route path="/Skills" element={<ProtectedRoute><Skills/></ProtectedRoute>}/>
-          <Route path="/Contact" element={<ProtectedRoute><Contact/></ProtectedRoute>}/>
           <Route path="/Projects" element={<ProtectedRoute><Projects/></ProtectedRoute>}/>
           <Route path="/Experience" element={<ProtectedRoute><Experience/></ProtectedRoute>}/>
           <Route path="/Proj" element={<ProtectedRoute><Proj/></ProtectedRoute>}/>
