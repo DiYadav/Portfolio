@@ -135,19 +135,22 @@ function AboutMe() {
                 title="resume.pdf"
                 className="bg-slate-500 w-[500px] h-[500px] rounded"
               ></iframe>
-              <button
-                onClick={handleDownload}
-                className="bg-cyan-800 mt-1 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+              <div className="bg-cyan-800  ml-15 mt-1 text-white px-4 py-2 rounded hover:bg-red-700 transition"
               >
+                <button
+                onClick={handleDownload}
+                >
                 Download
               </button>
+              </div>
+              
             </div>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="min-w-full h-screen bg-[#0f172a] text-white flex flex-col items-center justify-center px-6 snap-center">
+      <section className="min-w-full h-screen bg-[#1b1c1e] text-white flex flex-col items-center justify-center px-6 snap-center">
         <h3 className="text-3xl font-bold mb-6">
           Contact <span className="text-blue-400">Me!</span>
         </h3>
